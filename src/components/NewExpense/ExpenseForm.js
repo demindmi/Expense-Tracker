@@ -1,34 +1,38 @@
 import React, { useState } from "react";
 import "./ExpenseForm.css";
 
-const ExpenseForm = () => {
+// props come from parent component
+const ExpenseForm = (props) => {
+  // using state, with variable names starting with 'entered' or procedures starting with 'set'
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
 
+  //handlers to pass the value to variables
   const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
   };
-
   const amountChangeHandler = (event) => {
     setEnteredAmount(event.target.value);
   };
-
   const dateChangeHandler = (event) => {
     setEnteredDate(event.target.value);
   };
 
+  // handler to submit form
   const submitHandler = (event) => {
     //prevent page reload on submit:
     event.preventDefault();
-    //this will be passed on submit:
+    //this will be passed on submit(we create a variable to hold it):
     const expenseData = {
       title: enteredTitle,
       amount: enteredAmount,
       date: new Date(enteredDate),
     };
-    // we will have to clear the input  fields on submit, since we use two way binding
-    // via 'value' attribute of our inputs fields, we can simply do it this way
+
+    props.onSaveExpenseData(expenseData); //we get function name from parent, we can executed as the value of onSaveExpenseData is a function that we passed
+    // ! we are basically executing function defined in parent component, that we passed as a pointer via onSaveExpenseData property
+    // we will have to clear the input  fields on submit, since we use two way binding via 'value' attribute of our inputs fields, we can simply do it this way
     setEnteredAmount("");
     setEnteredDate("");
     setEnteredTitle("");
