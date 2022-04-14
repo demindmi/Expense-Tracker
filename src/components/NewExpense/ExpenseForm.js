@@ -7,6 +7,7 @@ const ExpenseForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
+  const [formAddExpense, setFormAddExpense] = useState(true);
 
   //handlers to pass the value to variables
   const titleChangeHandler = (event) => {
@@ -26,17 +27,33 @@ const ExpenseForm = (props) => {
     //this will be passed on submit(we create a variable to hold it):
     const expenseData = {
       title: enteredTitle,
-      amount: enteredAmount,
+      amount: +enteredAmount,
       date: new Date(enteredDate),
     };
-
     props.onSaveExpenseData(expenseData); //we get function name from parent, we can executed as the value of onSaveExpenseData is a function that we passed
     // ! we are basically executing function defined in parent component, that we passed as a pointer via onSaveExpenseData property
     // we will have to clear the input  fields on submit, since we use two way binding via 'value' attribute of our inputs fields, we can simply do it this way
+    setFormAddExpense(true);
     setEnteredAmount("");
     setEnteredDate("");
     setEnteredTitle("");
   };
+
+  const addNewExpenseHandler = () => {
+    setFormAddExpense(false);
+  };
+
+  const cancelNewExpenseHandler = () => {
+    setFormAddExpense(true);
+  };
+
+  if (formAddExpense) {
+    return (
+      <div>
+        <button onClick={addNewExpenseHandler}>Add Expense</button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={submitHandler}>
@@ -65,6 +82,9 @@ const ExpenseForm = (props) => {
         </div>
       </div>
       <div className="new-expense__actions">
+        <button type="cancel" onClick={cancelNewExpenseHandler}>
+          Cancel
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
